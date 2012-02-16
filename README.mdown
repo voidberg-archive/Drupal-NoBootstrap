@@ -1,0 +1,80 @@
+#Drupal NoBootstrap
+
+Drupal NoBootstrap is a small php library which allows you to be able to use some of Drupal's functions without bootstrapping Drupal.
+
+It's useful when you want to quickly deliver autocomplete suggestions or deliver fast search results via an AJAX call or simple web service.
+
+It currently has only a small number of functions based on what I needed. 
+
+It's developed at [Demotix.com](http://www.demotix.com/ "Demotix.com") by Alexandru Badiu.
+
+## Example usage
+### Deliver autocomplete results to jquery.autocomplete
+    <?php
+    require 'drupal_nb.php';
+
+    drupal_config('path/to/sites/default/settings.php');
+
+    connect();
+
+    $response = array(
+      'query' => $keys,
+      'suggestions' => array(),
+    );
+
+    $keys = $_GET['query'];
+    $keys = strtolower(trim($keys));
+
+    if ($keys == '') {
+      drupal_json($response);
+      exit();
+    }
+      
+    $result = mysql_query(sprintf("SELECT DISTINCT(title) FROM node n WHERE LOWER(title) LIKE '%s%%' LIMIT 0,10", mysql_real_escape_string($keys)));
+    while ($row = mysql_fetch_object($result)) {
+      $response['suggestions'][] = $row->title;
+    }
+    
+    drupal_json($response);
+    exit();
+### Querying Apache Solr
+    <?php
+    require 'drupal_nb.php';
+    require 'path/to/apachesolr/SolrPhpClient/Apache/Solr/Service.php';
+    
+    drupal_config('path/to/sites/default/settings.php');
+
+    connect();
+    
+    $host = variable_get('apachesolr_host', 'localhost');
+    $port = variable_get('apachesolr_port', 8080);
+    $path = variable_get('apachesolr_path', '/solr');
+    
+    $solr = new Apache_Solr_Service($host, $port, $path);
+    if (!$solr) {
+      return;
+    }
+    
+    $params = array(
+      ...
+    );
+    
+    $response = $solr->search("foo bar", 0, 10, $params);
+    if ($response->getHttpStatus() == 200) {
+      // process $response
+    }
+    else {
+      // fail
+    }
+
+## Implemented functions
+1. connect()
+2. variable_set($name, $value)
+3. variable_get($name, $default)
+4. drupal_json($var = NULL)
+5. dsm($input, $name = NULL)
+6. dpm($input, $name = NULL)
+7. drupal_substr($text, $start, $length = NULL)
+
+## TODO
+Implement more functions. Patches welcome!
