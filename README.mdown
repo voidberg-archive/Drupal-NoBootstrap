@@ -4,7 +4,7 @@ Drupal NoBootstrap is a small php library which allows you to be able to use som
 
 It's useful when you want to quickly deliver autocomplete suggestions or deliver fast search results via an AJAX call or simple web service.
 
-It currently has only a small number of functions based on what I needed. 
+It currently has only a small number of functions based on what was needed in the project that it was created for. It supports Drupal 6. 
 
 It's developed at [Demotix.com](http://www.demotix.com/ "Demotix.com") by Alexandru Badiu.
 
