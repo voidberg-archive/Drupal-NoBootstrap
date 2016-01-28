@@ -1,3 +1,5 @@
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
 #Drupal NoBootstrap
 
 Drupal NoBootstrap is a small php library which allows you to be able to use some of Drupal's functions without bootstrapping Drupal.
